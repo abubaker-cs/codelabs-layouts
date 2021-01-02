@@ -45,6 +45,9 @@
         style="@style/NameStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_margin"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:background="@color/colorAccent"
         android:text=""
         android:textAlignment="center"
         android:visibility="gone" />

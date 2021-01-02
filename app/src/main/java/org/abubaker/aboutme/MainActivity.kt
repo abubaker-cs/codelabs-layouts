@@ -53,6 +53,13 @@ class MainActivity : AppCompatActivity() {
 
         // Hide the Done button
         view.visibility = View.GONE
+
+        // set keyboard's focus
+        editText.requestFocus()
+
+        // show keyboard
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(editText, 0)
     }
 
 }
