@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
     // Global Variables
     private lateinit var binding: ActivityMainBinding
 
+    // Data Library
+    private val myName : MyName = MyName("Alex Haecky")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +25,8 @@ class MainActivity : AppCompatActivity() {
         // Creating a binding class to get references for all UI Elements
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // setContentView(R.layout.activity_main)
+        // Assigning our custom value to the the DATA-VARIABLE in activity_main.xml in <data><variable /></data>
+        binding.myName = myName
 
         // When the DONE button will be pressed
         binding.doneButton.setOnClickListener{
@@ -42,7 +46,9 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
 
             // Note: When using data binding, it is necessary to explicitly convert the Editable to a String.
-            binding.nicknameText.text = binding.nicknameEdit.text.toString()
+            // binding.nicknameText.text = binding.nicknameEdit.text.toString()
+            myName?.nickname = nicknameEdit.text.toString()
+            invalidateAll() // This will refresh UI with the updated values in the binding object
 
             // Hide Edit field and Show new Nickname
             binding.nicknameEdit.visibility = View.GONE
