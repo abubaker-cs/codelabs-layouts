@@ -1,41 +1,55 @@
 package org.abubaker.aboutme
 
 import android.content.Context
-import android.hardware.input.InputManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import org.abubaker.aboutme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    // Global Variables
+    private lateinit var binding: ActivityMainBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        // Creating a binding class to get references for all UI Elements
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        // setContentView(R.layout.activity_main)
 
         // When the DONE button will be pressed
-        findViewById<Button>(R.id.done_button).setOnClickListener{
+        binding.doneButton.setOnClickListener{
             addNickName(it) // it = done_button | view passed as the argument
         }
 
         // When the TextField will be clicked
-        findViewById<TextView>(R.id.nickname_text).setOnClickListener {
+        binding.nicknameText.setOnClickListener {
             updateNickName(it)
         }
     }
 
     // Function: Add Nickname
     private fun addNickName(view: View) {
-        val editText = findViewById<EditText>(R.id.nickname_edit)
-        val nicknameTextVeiw = findViewById<TextView>(R.id.nickname_text)
 
-        nicknameTextVeiw.text = editText.text
+        // Kotlinize the function by using apply{}.
+        binding.apply {
 
-        // Hide Edit field and Show new Nickname
-        editText.visibility = View.GONE
-        nicknameTextVeiw.visibility = View.VISIBLE
+            // Note: When using data binding, it is necessary to explicitly convert the Editable to a String.
+            binding.nicknameText.text = binding.nicknameEdit.text.toString()
+
+            // Hide Edit field and Show new Nickname
+            binding.nicknameEdit.visibility = View.GONE
+            binding.doneButton.visibility = View.GONE // Replacement for view.visibility = View.GONE
+
+            binding.nicknameText.visibility = View.VISIBLE
+        }
 
         // Hide the Keyboard when the user will press DONE
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -44,22 +58,18 @@ class MainActivity : AppCompatActivity() {
 
     // Function: Update Nickname
     private fun updateNickName (view: View){
-        val editText = findViewById<EditText>(R.id.nickname_edit)
-        val doneButton = findViewById<Button>(R.id.done_button)
-
         // Show: Edit field and Done buttons
-        editText.visibility = View.VISIBLE
-        doneButton.visibility = View.VISIBLE
+        binding.nicknameEdit.visibility = View.VISIBLE
 
         // Hide the Done button
-        view.visibility = View.GONE
+        binding.doneButton.visibility = View.VISIBLE
 
         // set keyboard's focus
-        editText.requestFocus()
+        binding.nicknameEdit.requestFocus()
 
         // show keyboard
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(editText, 0)
+        imm.showSoftInput(binding.nicknameEdit, 0)
     }
 
 }
